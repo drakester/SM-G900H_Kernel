@@ -51,7 +51,7 @@
 	(gpio_get_value((p)->pdata->gpio_link_active))
 
 /* /sys/module/modem_link_pm_xmm626x/parameters/...*/
-static int l2_delay = 500;
+static int l2_delay = 200;
 module_param(l2_delay, int, S_IRUGO);
 MODULE_PARM_DESC(l2_delay, "HSIC autosuspend delay");
 
@@ -980,8 +980,7 @@ static void link_pm_runtime_work(struct work_struct *work)
 		wake_unlock(&pmdata->tx_wake);
 	} else {				/*wait for runtime resume done*/
 		mif_info("rpm (%d), delayed work\n", dev->power.runtime_status);
-		queue_delayed_work(pmdata->wq, &pmdata->link_pm_work,
-							msecs_to_jiffies(100));
+		queue_delayed_work(pmdata->wq, &pmdata->link_pm_work, 0);
 	}
 }
 #endif
