@@ -1634,7 +1634,7 @@ static ssize_t show_cpu_util(struct cpufreq_interactive_tunables
 			ret += sprintf(buf + ret, "OFF ");
 	}
 
-	ret += sprintf(buf + --ret, "\n");
+	sprintf(buf + ret - 1, "\n");
 	return ret;
 }
 #endif
