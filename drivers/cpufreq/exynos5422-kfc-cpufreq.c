@@ -412,7 +412,7 @@ static void __init set_volt_table_CA7(void)
 #else
 	max_support_idx_CA7 = L3;
 #endif
-	min_support_idx_CA7 = L11;
+	min_support_idx_CA7 = L14;
 }
 
 static bool exynos5422_is_alive_CA7(void)
