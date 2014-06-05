@@ -18,7 +18,7 @@
 #include <linux/rbtree.h>
 #include <linux/sched.h>
 
-$include <linux/mfd/arizona/control.h>
+#include <linux/mfd/arizona/control.h>
 
 #define CREATE_TRACE_POINTS
 #include <trace/events/regmap.h>
