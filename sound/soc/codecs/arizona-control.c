@@ -128,11 +128,6 @@ static unsigned int __eq_sp_gain(struct arizona_control *ctl)
 	return _delta(ctl, ctl->value, 12);
 }
 
-static unsigned int __hp_volume(struct arizona_control *ctl)
-{
-	return ctl->ctlval == 112 ? ctl->value : ctl->ctlval;
-}
-
 static unsigned int hp_callback(struct arizona_control *ctl);
 static unsigned int hp_power(struct arizona_control *ctl);
 static unsigned int sp_callback(struct arizona_control *ctl);
@@ -158,9 +153,9 @@ enum sound_control {
 static struct arizona_control ctls[] = {
 	/* Volumes */
 	_ctl("headphone_left", CTL_ACTIVE, ARIZONA_DAC_DIGITAL_VOLUME_1L,
-		ARIZONA_OUT1L_VOL_MASK, ARIZONA_OUT1L_VOL_SHIFT, __hp_volume),
+		ARIZONA_OUT1L_VOL_MASK, ARIZONA_OUT1L_VOL_SHIFT, __delta),
 	_ctl("headphone_right", CTL_ACTIVE, ARIZONA_DAC_DIGITAL_VOLUME_1R, 
-		ARIZONA_OUT1R_VOL_MASK, ARIZONA_OUT1R_VOL_SHIFT, __hp_volume),
+		ARIZONA_OUT1R_VOL_MASK, ARIZONA_OUT1R_VOL_SHIFT, __delta),
 
 	_ctl("dock_left", CTL_ACTIVE, ARIZONA_DAC_DIGITAL_VOLUME_2L, 
 		ARIZONA_OUT2L_VOL_MASK, ARIZONA_OUT2L_VOL_SHIFT, __simple),
