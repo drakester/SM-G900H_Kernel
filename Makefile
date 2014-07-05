@@ -193,7 +193,7 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
 # Default value for CROSS_COMPILE is not to prefix executables
 # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile
 ARCH		?= arm
-CROSS_COMPILE	?= /opt/toolchains/arm-linux-gnueabi-linaro_4.9.1-2014.06/bin/arm-eabi-
+CROSS_COMPILE	?= /opt/toolchains/linaro-arm-eabi-4.10/bin/arm-eabi-
 
 # Architecture as present in compile.h
 UTS_MACHINE 	:= $(ARCH)
@@ -348,10 +348,10 @@ endif
 
 CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 		  -Wbitwise -Wno-return-void $(CF)
-CFLAGS_MODULE   = -mfpu=neon-vfpv4
-AFLAGS_MODULE   =
+CFLAGS_MODULE   = -mfpu=neon-vfpv4 -O3
+AFLAGS_MODULE   = -mfpu=neon-vfpv4 -O3
 LDFLAGS_MODULE  = --strip-debug
-CFLAGS_KERNEL	= -mfpu=neon-vfpv4 -march=armv7ve
+CFLAGS_KERNEL	= -mfpu=neon-vfpv4 -march=armv7ve -mtune=cortex-a7 -O3 -fgraphite -floop-parallelize-all -ftree-loop-linear -floop-interchange -floop-strip-mine -floop-block
 AFLAGS_KERNEL	=
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
@@ -379,8 +379,13 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common \
 		   -Werror-implicit-function-declaration \
 		   -Wno-format-security \
+		   -mno-unaligned-access \
 		   -fno-delete-null-pointer-checks \
-		   -fdiagnostics-show-option -Werror -Wno-aggressive-loop-optimizations
+		   -Wno-error=maybe-uninitialized \
+		   -Wno-error=array-bounds \
+		   -fdiagnostics-show-option \
+		   -Werror \
+		   -Wno-aggressive-loop-optimizations
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
@@ -580,7 +585,7 @@ all: vmlinux
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os $(call cc-disable-warning,maybe-uninitialized,)
 else
-KBUILD_CFLAGS	+= -O2
+KBUILD_CFLAGS	+= -O3
 endif
 
 include $(srctree)/arch/$(SRCARCH)/Makefile
